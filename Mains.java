@@ -2,50 +2,60 @@ package Java.Java;
 
 import java.util.Scanner;
 
-class Rectangle {
+interface Figure {
+    double calculateArea();
+
+    double calculatePerimeter();
+}
+
+interface Resizable {
+    void resize(double factor);
+}
+
+class Rectangle implements Figure, Resizable {
     private double width;
     private double height;
 
-    // Конструктор без параметров
     public Rectangle() {
-        this.width = 1.0; // Ширина по умолчанию
-        this.height = 1.0; // Высота по умолчанию
+        this.width = 1.0;
+        this.height = 1.0;
     }
 
-    // Конструктор с параметрами
     public Rectangle(double width, double height) {
         this.width = width;
         this.height = height;
     }
 
-    // Метод доступа для свойства "ширина" (width)
     public double getWidth() {
         return width;
     }
 
-    // Метод установки значения для свойства "ширина" (width)
     public void setWidth(double width) {
         this.width = width;
     }
 
-    // Метод доступа для свойства "высота" (height)
     public double getHeight() {
         return height;
     }
 
-    // Метод установки значения для свойства "высота" (height)
     public void setHeight(double height) {
         this.height = height;
     }
 
-    // Метод вычисления площади прямоугольника
+    @Override
     public double calculateArea() {
         return width * height;
     }
 
-    // Метод вычисления периметра прямоугольника
+    @Override
     public double calculatePerimeter() {
         return 2 * (width + height);
+    }
+
+    @Override
+    public void resize(double factor) {
+        width *= factor;
+        height *= factor;
     }
 }
 

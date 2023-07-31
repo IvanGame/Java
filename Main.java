@@ -1,6 +1,22 @@
 package Java.Java;
 
-class Cat {
+interface Pet {
+    void greet();
+}
+
+interface Named {
+    String getName();
+
+    void setName(String name);
+}
+
+interface HasOwner {
+    String getOwnerName();
+
+    void setOwnerName(String ownerName);
+}
+
+class Cat implements Pet, Named, HasOwner {
     private String name;
     private int age;
     private String ownerName;
@@ -42,6 +58,7 @@ class Cat {
     }
 
     // Метод приветствия
+    @Override
     public void greet() {
         String greeting = "Мяу! Меня зовут " + name + ". Мне " + age + " года.";
         if (ownerName != null) {
@@ -51,7 +68,7 @@ class Cat {
     }
 }
 
-class Owner {
+class Owner implements Named {
     private String name;
 
     // Конструктор класса Owner
@@ -60,11 +77,13 @@ class Owner {
     }
 
     // Метод доступа для поля "имя" (name)
+    @Override
     public String getName() {
         return name;
     }
 
     // Метод установки значения для поля "имя" (name)
+    @Override
     public void setName(String name) {
         this.name = name;
     }
