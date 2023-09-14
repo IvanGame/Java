@@ -1,27 +1,66 @@
 package Java.Java;
 
-import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> employees = Arrays.asList(
-                "Светлана Петрова", "Кристина Белова", "Анна Мусина", "Анна Крутова",
-                "Иван Юрин", "Петр Лыков", "Павел Чернов", "Петр Чернышов",
-                "Мария Федорова", "Марина Светлова", "Иван Савин", "Мария Рыкова",
-                "Марина Лугова", "Анна Владимирова", "Иван Мечников", "Петр Петин", "Иван Ежов");
+        Scanner scanner = new Scanner(System.in);
 
-        Map<String, Integer> nameOccurrences = new HashMap<>();
+        System.out.println("Введите данные в произвольном порядке, разделенные пробелом:");
+        String input = scanner.nextLine();
 
-        for (String employee : employees) {
-            String firstName = employee.split(" ")[0];
-            nameOccurrences.put(firstName, nameOccurrences.getOrDefault(firstName, 0) + 1);
+        String[] inputData = input.split(" ");
+
+        // Проверка количества данных
+        if (inputData.length != 6) {
+            System.err.println(
+                    "Ошибка: Неверное количество данных. Введите Фамилия Имя Отчество ДатаРождения НомерТелефона Пол.");
+            return;
         }
 
-        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(nameOccurrences.entrySet());
-        sortedEntries.sort(Map.Entry.<String, Integer>comparingByValue().reversed());
+        String lastName = inputData[0];
+        String firstName = inputData[1];
+        String middleName = inputData[2];
+        String birthDateStr = inputData[3];
+        String phoneNumberStr = inputData[4];
+        String genderStr = inputData[5];
 
-        for (Map.Entry<String, Integer> entry : sortedEntries) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
+        try {
+            // Парсинг даты
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            Date birthDate = dateFormat.parse(birthDateStr);
+
+            // Парсинг номера телефона
+            long phoneNumber = Long.parseLong(phoneNumberStr);
+
+            // Проверка пола
+            if (!genderStr.equals("m") && !genderStr.equals("f")) {
+                System.err.println("Ошибка: Неверное значение пола. Используйте 'm' или 'f'.");
+                return;
+            }
+
+            // Создание строки для записи в файл
+            String dataToWrite = lastName + firstName + middleName + birthDateStr + " " + phoneNumber + genderStr;
+
+            // Создание или открытие файла для записи
+            FileWriter fileWriter = new FileWriter(lastName + ".txt");
+            fileWriter.write(dataToWrite + "\n");
+            fileWriter.close();
+
+            System.out.println("Данные успешно записаны в файл " + lastName + ".txt");
+
+        } catch (ParseException e) {
+            System.err.println("Ошибка: Неверный формат даты рождения. Используйте формат dd.MM.yyyy.");
+        } catch (NumberFormatException e) {
+            System.err.println(
+                    "Ошибка: Неверный формат номера телефона. Используйте целое беззнаковое число без форматирования.");
+        } catch (IOException e) {
+            System.err.println("Ошибка: при записи данных в файл: " + e.getMessage());
         }
     }
 }
